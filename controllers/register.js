@@ -1,11 +1,11 @@
 const handleRegister = (req, res, db, bcrypt) => {
-    const { name, email, password } = req.body; // destructure req.body
+    const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
         return res.status(400).json("incorrect form submission");
     }
 
-    const hash = bcrypt.hashSync(password); // hash the password
+    const hash = bcrypt.hashSync(password);
     db.transaction((trx) => {
         trx.insert({
             hash: hash,
@@ -15,14 +15,13 @@ const handleRegister = (req, res, db, bcrypt) => {
             .returning("email")
             .then((loginEmail) => {
                 return trx("users")
-                    .returning("*") // this will return what is inserted, returns an array
+                    .returning("*")
                     .insert({
-                        email: loginEmail[0], // put [0] because we need the content of the array returned
+                        email: loginEmail[0],
                         name: name,
                         joined: new Date(),
                     })
                     .then((user) => {
-                        //user is the response, it is the inserted value produced by .returning
                         res.json(user[0]);
                     });
             })

@@ -1,5 +1,5 @@
 const handleSignIn = (req, res, db, bcrypt) => {
-    const { email, password } = req.body; // destructure req.body
+    const { email, password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json("incorrect form submission");
@@ -15,7 +15,7 @@ const handleSignIn = (req, res, db, bcrypt) => {
                     .from("users")
                     .where("email", "=", data[0].email)
                     .then((user) => {
-                        res.json(user[0]); // [0] to get the value out of the array response
+                        res.json(user[0]);
                     })
                     .catch((err) => {
                         res.status(400).json("unable to get user");
